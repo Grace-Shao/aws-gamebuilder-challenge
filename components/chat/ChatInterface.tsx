@@ -21,14 +21,13 @@ export function ChatInterface({ topic }: ChatInterfaceProps) {
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        if (topic) {
-            const initialMessage: Message = {
-                id: Date.now().toString(),
-                content: `Welcome! Let's talk about ${topic}.`,
-                role: 'assistant',
-            }
-            setMessages([initialMessage])
+        setMessages([])
+        const initialMessage: Message = {
+            id: Date.now().toString(),
+            content: `Welcome! Let's discuss ${topic} in Chinese. I'll focus exclusively on this topic. What would you like to know about ${topic}?`,
+            role: 'assistant',
         }
+        setMessages([initialMessage])
     }, [topic])
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -52,7 +51,11 @@ export function ChatInterface({ topic }: ChatInterfaceProps) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    inputText: `Please focus on ${topic} while discussing: ${input}`,
+                    inputText: input,
+                    topic: topic,
+                    systemMessage: `You are a tutor focusing exclusively on the topic of "${topic}". 
+                    Only provide information and responses related to this specific topic in the context of topic. 
+                    If the user asks about anything outside this topic, politely redirect them back to ${topic}.`,
                 }),
             })
 
@@ -60,7 +63,7 @@ export function ChatInterface({ topic }: ChatInterfaceProps) {
 
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
-                content: data.message || "I couldn't process your request. Please try again.",
+                content: data.message || "I apologize, but I couldn't process your request. Let's continue our discussion about " + topic + ".",
                 role: 'assistant',
             }
 
@@ -69,7 +72,7 @@ export function ChatInterface({ topic }: ChatInterfaceProps) {
             console.error('Error:', error)
             const errorMessage: Message = {
                 id: (Date.now() + 1).toString(),
-                content: "I'm sorry, there was an error processing your request.",
+                content: `I'm sorry, there was an error processing your request. Let's continue our discussion about ${topic}.`,
                 role: 'assistant',
             }
             setMessages((prev) => [...prev, errorMessage])
