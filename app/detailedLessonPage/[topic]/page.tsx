@@ -8,13 +8,12 @@ import { ChatInterface } from '@/components/chat/ChatInterface'
 
 export default function DetailedLessonPage() {
     const params = useParams()
-    const topic = params?.topic as string
+    const topicParam = params?.topic as string
     const [topic, setTopic] = useState("")
-    const [aiOutput, setAiOutput] = useState("Waiting for your language partner")
     //this is just a placeholder value
     const user = "user6"
     const level = "beginner"
-    const topicParam = params?.topic as string
+    
 
     useEffect(() => {
         // Parse the topic from the URL parameter
