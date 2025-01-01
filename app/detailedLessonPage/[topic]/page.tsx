@@ -6,52 +6,34 @@ import { useParams } from 'next/navigation'
 import Notes from "@/components/Notes"
 import { ChatInterface } from '@/components/chat/ChatInterface'
 
-const fetchAI = async (topic: string) => {
-    try {
-        const res = await fetch(`/api/ai`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                inputText: `Please focus on ${topic} topics when teaching Chinese.`,
-            }),
-        })
-        const data = await res.json()
-        return data
-    } catch (error) {
-        console.error("Error loading AI", error)
-    }
-}
-
 export default function DetailedLessonPage() {
     const params = useParams()
     const topic = params?.topic as string
+    const [topic, setTopic] = useState("")
     const [aiOutput, setAiOutput] = useState("Waiting for your language partner")
     //this is just a placeholder value
     const user = "user6"
     const level = "beginner"
-    // const user = params?.user as string
-    // const level = params?.level as string
+    const topicParam = params?.topic as string
 
     useEffect(() => {
-        async function getAIOutput() {
-            const data = await fetchAI(topic)
-            if (data && data.output && data.output.message && data.output.message.content) {
-                const textOutput = data.output.message.content.map((item: { text: string }) => item.text).join("\n\n")
-                setAiOutput(textOutput)
-            } else {
-                setAiOutput("No output received from AI.")
-            }
-        }
-        getAIOutput()
-    }, [topic])
+        // Parse the topic from the URL parameter
+        const parsedTopic = topicParam
+            .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+            .trim() // Remove leading/trailing spaces
+            .toLowerCase() // Convert to lowercase
+            .replace(/\b\w/g, c => c.toUpperCase()) // Capitalize first letter of each word
+        setTopic(parsedTopic)
+    }, [topicParam])
 
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-br from-pink-100 to-pink-200">
             <Navbar />
             <div className="flex-grow flex justify-center px-4 py-6">
                 <div className="w-full max-w-4xl">
+                    <h1 className="text-3xl font-bold text-pink-800 mb-6 text-center">
+                        {topic}
+                    </h1>
                     <ChatInterface topic={topic} />
                 </div>
             </div>
