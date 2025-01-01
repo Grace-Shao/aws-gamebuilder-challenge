@@ -143,8 +143,4 @@ export default function Notes({ user, lvl, topic }: NotesProps) {
         </Button>
     )
 }
-//         )
-//     }
 
-//     // ... rest of your component
-// }
