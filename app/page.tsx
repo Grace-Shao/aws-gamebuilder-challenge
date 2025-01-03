@@ -7,7 +7,7 @@ export default function WelcomePage() {
     <div className="min-h-screen bg-[#FFFBE8]">
       <Navbar />
       <main className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] -mt-16">
-        <h1 className="font-eczar text-5xl mb-8 text-[#2D2D2D]">
+        <h1 className="font-eczar text-5xl mb-8 text-[#2D2D2D] font-bold">
           polypal
         </h1>
         
@@ -24,7 +24,7 @@ export default function WelcomePage() {
         <div className="flex flex-col gap-4 items-center">
           <Link 
             href="/lessonPage"
-            className="px-8 py-3 bg-[#FF9000] text-white rounded-full font-medium text-lg hover:bg-[#FF9000]/90 transition-colors"
+            className="px-8 py-3 bg-[#FF9000] text-white rounded-full font-bold text-lg hover:bg-[#FF9000]/90 transition-colors"
           >
             start playing for free!
           </Link>
