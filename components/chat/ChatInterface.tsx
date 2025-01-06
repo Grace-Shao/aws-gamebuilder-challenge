@@ -4,6 +4,17 @@ import { useState, useEffect } from 'react'
 import { Card } from "@/components/ui/card"
 import { MessageBubble } from './message-bubble'
 import { MessageInput } from './message-input'
+import Image from 'next/image'
+
+const voiceCharacters: { [key: string]: string } = {
+    "English" : "Joanna",
+    "Spanish" : "Mia",
+    "Chinese" : "Zhiyu",
+    "German" : "Vicki",
+    "French" : "Lea",
+    "Hindi" : "Aditi",
+    "Arabic" : "Zeina"
+}
 
 interface Message {
     id: string
@@ -103,11 +114,70 @@ export function ChatInterface({ topic }: ChatInterfaceProps) {
         }
     }
 
+    //text to speech starts
+    let language = "Chinese" //change this
+    const [isLoadingVoice, setIsLoadingVoice] = useState(false);
+    const playWithVoice = async ( message: String ) => {
+        if (!message) {
+            return;
+        }
+        let voiceId = voiceCharacters[language]
+        setIsLoadingVoice(true);
+
+        try {
+            const response = await fetch('/api/polly', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    text: message,
+                    voiceId: voiceId
+                }),
+            });
+            if (!response.ok) {
+                throw new Error('Speech synthesis failed');
+            }
+
+            const audioBlob = await response.blob();
+            const audio = new Audio(URL.createObjectURL(audioBlob));
+
+            audio.onended = () => {
+                URL.revokeObjectURL(audio.src);
+                setIsLoadingVoice(false);
+            };
+            await audio.play();
+
+        } catch (error) {
+            console.error('Error:', error);
+            setIsLoadingVoice(false);
+        }
+    };
+    //text to speech ends here
+
     return (
         <Card className="flex flex-col h-[calc(100vh-140px)] bg-white/80 backdrop-blur-sm border-[#594F43]">
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((message) => (
-                    <MessageBubble key={message.id} content={message.content} role={message.role} />
+                    <div key={message.id} className="flex items-start gap-2">
+                        <MessageBubble content={message.content} role={message.role} />
+                        {message.role === 'assistant' && (
+                            <button
+                                onClick={() =>playWithVoice(message.content)}
+                                disabled={isLoadingVoice}
+                                //move it using this
+                                className="flex-shrink-0 -ml-1 mt-2"  
+                            >
+                                <Image 
+                                    src="/voice.png" 
+                                    alt="error" 
+                                    // change the size here
+                                    width={40}  
+                                    height={40}
+                                />
+                            </button>
+                        )}
+                    </div>
                 ))}
                 {isLoading && (
                     <div className="flex items-center space-x-2">
@@ -126,4 +196,3 @@ export function ChatInterface({ topic }: ChatInterfaceProps) {
         </Card>
     )
 }
-

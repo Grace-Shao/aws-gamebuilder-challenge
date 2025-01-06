@@ -11,6 +11,7 @@
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.716.0",
     "@aws-sdk/client-dynamodb": "^3.716.0",
+    "@aws-sdk/client-polly": "^3.721.0",
     "@aws-sdk/client-s3": "^3.717.0",
     "@aws-sdk/credential-providers": "^3.716.0",
     "@aws-sdk/lib-dynamodb": "^3.716.0",
@@ -20,7 +21,6 @@
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@rive-app/canvas": "^2.25.3",
-    "@rive-app/react-canvas": "^4.17.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
