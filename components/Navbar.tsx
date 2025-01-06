@@ -12,6 +12,7 @@ export default function Navbar() {
     { name: 'Levels', path: '/levels' },
     { name: 'About', path: '/about' },
     { name: 'Store', path: '/shopPage' },
+    { name: 'Room', path: '/roomPage' },
   ]
 
   return (
