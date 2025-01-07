@@ -2,16 +2,23 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 
 export default function Navbar() {
   const pathname = usePathname()
+  const [isPlayOpen, setIsPlayOpen] = useState(false)
 
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Languages', path: '/languages' },
-    { name: 'Levels', path: '/levels' },
     { name: 'About', path: '/about' },
     { name: 'Store', path: '/shopPage' },
+  ]
+
+  const playItems = [
+    { name: 'Languages', path: '/languages' },
+    { name: 'Levels', path: '/levels' },
+    { name: 'Lessons', path: '/lessonPage' },
   ]
 
   return (
@@ -30,6 +37,33 @@ export default function Navbar() {
             {item.name}
           </Link>
         ))}
+        <div className="relative">
+          <button
+            onClick={() => setIsPlayOpen(!isPlayOpen)}
+            className={`px-4 py-2 font-bold hover:scale-110 transition-transform flex items-center ${
+              playItems.some(item => pathname === item.path)
+                ? "bg-[#FF9000] text-white rounded-full"
+                : "text-black"
+            }`}
+          >
+            Play
+            <ChevronDown className="ml-1 h-4 w-4" />
+          </button>
+          {isPlayOpen && (
+            <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+              {playItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.path}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setIsPlayOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <button className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
         <svg
