@@ -121,13 +121,14 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
     const [isLoading, setIsLoading] = useState(false)
     const [userMessageCount] = useState(0);
     const messagesPerReward = 10;
+    const [isSpeaking, setIsSpeaking] = useState(false);
 
     useEffect(() => {
         setMessages([])
         const greeting = welcomeMessages[language] || welcomeMessages["English"];
         const initialMessage: Message = {
             id: Date.now().toString(),
-            content: `${greeting} ${topic} in ${language}. I'll focus exclusively on this topic. What would you like to know about ${topic}?`,
+            content: `${greeting} ${topic} in ${language}. I'm Mistah Purry and I'm here to help you focus exclusively on this topic. What would you like to know about ${topic}?`,
             role: 'assistant',
         }
         setMessages([initialMessage])
@@ -157,13 +158,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
                     inputText: input,
                     topic: topic,
                     language: language,
-                    systemMessage: `You are a fun language conversation partner teaching ${topic} in ${language}. 
+                    systemMessage: 
+                    `
+                    You are a playful and funny cat teaching ${topic} in ${language}. 
                     Your role is to:
-                    1. Converse about ${topic} in ${language}. You are talking to the user like a native in their language.
-                    2. The second generated text should be a brief explaination of what the conversation means in english
-                    3. Stay focused on ${topic} and ${language} only
-                    4. Never assume the user is asking about a different language
-                    If the user asks about anything outside this topic, politely redirect them back to ${topic} in ${language}.`,
+                    1. Teach the words or phrases strictly in ${language}. Use playful, cat-like expressions, such as "This word is paw-some!" or "Meow-mazing, isn't it?"
+                    2. Explain the meaning and context of the words or phrases in English. Your explanations should be simple, clear, and engaging, with a touch of humor.
+                    3. Stay focused on ${topic} and ${language}. If the user asks about anything else, redirect them back with cat puns like, "Oops, that's outside my litter box of knowledge. Let's stick to ${topic}, meow!"
+                    4. Keep your tone playful, curious, and cat-like. Use phrases like "purr-fect," "meow," and "paw-some" in your responses.
+                    5. Always make learning fun, like a cat showing off its new toy.
+                    6. Explain the concepts as if learners are very beginners, 5 years old, and keep it short, simple, stupid
+
+                    Remember, you're a funny, language-loving cat sharing your paw-some knowledge with humans!
+                    `,
                 }),
             })
 
@@ -261,6 +268,15 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
         };
         //text to speech ends here
 
+    const toggleVoice = () => {
+        setIsSpeaking(!isSpeaking);
+        if (isSpeaking) {
+            // Stop speaking logic here if needed
+        } else {
+            // Start speaking logic here if needed
+        }
+    };
+
     return (
         <div className="relative">
             {/* Cat animation container */}
@@ -274,22 +290,17 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
 
             <Card className="flex flex-col h-[calc(100vh-140px)] bg-white/80 backdrop-blur-sm border-[#594F43]">
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.map((message) => (
-                        <div key={message.id} className="flex items-start gap-2">
+                    {messages.map((message) => (
+                        <div key={message.id} className="flex items-start gap-1 w-full">
                             <MessageBubble content={message.content} role={message.role} />
                             {message.role === 'assistant' && (
                                 <button
-                                    onClick={() => {
-                                        playWithVoice(message.content);
-                                        setIsLoadingVoice(!isLoadingVoice)
-                                    }}
-                                    //move it using this
-                                    className="flex-shrink-0 -ml-1 mt-2"  
+                                    onClick={toggleVoice}
+                                    className="flex-shrink-0 -ml-0.5 mt-1"
                                 >
                                     <Image 
-                                        src="/voice.png" 
-                                        alt="error" 
-                                        // change the size here
+                                        src={isSpeaking ? "/catMouthOn.png" : "/catMouthOff.png"}
+                                        alt="Voice Toggle" 
                                         width={40}  
                                         height={40}
                                     />

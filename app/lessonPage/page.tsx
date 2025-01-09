@@ -28,7 +28,7 @@ export default function LessonPage() {
 
     const topics = [
         { 
-            title: "Beginner Topics", 
+            title: "Beginner Topics 😺", 
             items: [
                 { name: "Greetings & Self-Introduction", description: "Learn basic introductions", icon: MessageCircle, href: "/detailedLessonPage/BeginnerGreetings" },
                 { name: "Numbers, Time, and Dates", description: "Master essential time concepts", icon: Clock, href: "/detailedLessonPage/BeginnerNumbers" },
@@ -41,7 +41,7 @@ export default function LessonPage() {
             ]
         },
         { 
-            title: "Intermediate Topics", 
+            title: "Intermediate Topics 😼", 
             items: [
                 { name: "Travel & Directions", description: "Navigate new places", icon: Map, href: "/detailedLessonPage/IntermediateTravel" },
                 { name: "Describing People & Places", description: "Use detailed descriptions", icon: Globe, href: "/detailedLessonPage/IntermediateDescriptions" },
@@ -54,7 +54,7 @@ export default function LessonPage() {
             ]
         },
         { 
-            title: "Advanced Topics", 
+            title: "Advanced Topics 🙀", 
             items: [
                 { name: "Discussing Opinions & Current Events", description: "Engage in complex debates", icon: Newspaper, href: "/detailedLessonPage/AdvancedCurrentEvents" },
                 { name: "Complex Conversations & Abstract Topics", description: "Explore philosophical ideas", icon: Brain, href: "/detailedLessonPage/AdvancedAbstractTopics" },

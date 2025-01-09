@@ -16,7 +16,7 @@ export default function Navbar() {
 
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Languages', path: '/languages' },
+    { name: 'Play', path: '/languages' },
     // { name: 'Levels', path: '/levels' },
     { name: 'About', path: '/about' },
     { name: 'Store', path: '/shopPage' },

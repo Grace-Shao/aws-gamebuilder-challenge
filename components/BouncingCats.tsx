@@ -29,7 +29,7 @@ interface Cat {
   shakeOffset: { x: number; y: number }
 }
 
-export default function BouncingCats() {
+export default function BouncingCats({ catCount }: { catCount: number }) {
   const [cats, setCats] = useState<Cat[]>([])
   const requestRef = useRef<number | null>(null)  // Fixed: Initialize with null
   const lastTimeRef = useRef<number | null>(null)  // Fixed: Initialize with null
@@ -157,22 +157,27 @@ export default function BouncingCats() {
   }, [])
 
   useEffect(() => {
-    // Add new cats periodically
-    const interval = setInterval(() => {
-      setCats(prev => prev.length < 15 ? [...prev, createCat()] : prev)
-    }, 800)
-
     // Start animation
     requestRef.current = requestAnimationFrame(animate)
+    // Add new cats periodically
+    // const interval = setInterval(() => {
+    //   setCats(prev => prev.length < 15 ? [...prev, createCat()] : prev)
+    // }, 800)
 
     return () => {
-      clearInterval(interval)
+      // clearInterval(interval)
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current)
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [windowSize.width, windowSize.height])
+
+  useEffect(() => {
+    if (cats.length < catCount) {
+      setCats(prev => [...prev, createCat()]);
+    }
+  }, [catCount]);
 
   const handleMouseDown = (e: React.MouseEvent, catId: number) => {
     setDraggedCat(catId)
@@ -233,3 +238,4 @@ export default function BouncingCats() {
     </div>
   )
 }
+
