@@ -2,13 +2,42 @@ import { cn } from "@/lib/utils";
 import { User } from 'lucide-react';
 import Image from 'next/image';
 import MarkdownRenderer from "../MarkdownRender";
+import { useState } from 'react'
 
 interface MessageBubbleProps {
   content: string;
   role: 'user' | 'assistant';
+  onPlayVoice?: (text: string) => void;
 }
 
-export function MessageBubble({ content, role }: MessageBubbleProps) {
+export function MessageBubble({ content, role, onPlayVoice }: MessageBubbleProps) {
+  const [hoveredWord, setHoveredWord] = useState<string | null>(null);
+
+  const handleWordHover = (word: string) => {
+    setHoveredWord(word);
+  };
+  const handleWordLeave = () => {
+    setHoveredWord(null);
+  };
+  
+  const wrapWordsInSpans = (text: string) => {
+    return text.split(' ').map((word, index) => (
+      <span key={`${word}-${index}`}>
+      <span 
+          className="hover:bg-yellow-200 cursor-pointer"
+          onMouseEnter={() => handleWordHover(word)}
+          onMouseLeave={handleWordLeave}
+          onClick={() => onPlayVoice!(word)}
+      >
+          {word}
+      </span>
+      <span>
+        {" "}
+      </span>
+    </span>
+    ));
+  };
+  
   return (
     <div className={cn("flex", role === 'user' ? "justify-end" : "justify-start")}>
       {role === 'assistant' && (
@@ -23,7 +52,8 @@ export function MessageBubble({ content, role }: MessageBubbleProps) {
             />
           </div>
           <div className={cn("rounded-lg px-4 py-2 text-sm max-w-[80%]", "bg-[#FF9000] text-[#020202] border-[#594F43]")}>
-            <MarkdownRenderer markdownText={content} />
+            {wrapWordsInSpans(content)}
+            {/* <MarkdownRenderer markdownText={content} /> */}
           </div>
         </div>
       )}

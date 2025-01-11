@@ -169,7 +169,7 @@ export default function Notes({ user, lvl, topic, language }: NotesProps) {
                     className="transition-colors"
                 />
             </Button>
-            <span className="text-sm text-gray-600 mt-1 font-bold">Take Notes</span>
+            <span className="text-sm text-gray-600 mt-1 font-bold">Click on words or phrases to see their pronounciation</span>
         </div>
     )
 }
