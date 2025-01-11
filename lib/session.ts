@@ -21,7 +21,8 @@ export async function getSession() {
   try {
     const decoded = await decrypt(session)
     return decoded
-  } catch (error) {
+    } catch (error) {
+    console.error('Failed to decrypt session:', error)
     return null
   }
 }

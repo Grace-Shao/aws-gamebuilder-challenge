@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SignJWT, jwtVerify } from 'jose'
 
 const secretKey = new TextEncoder().encode(process.env.JWT_SECRET_KEY)

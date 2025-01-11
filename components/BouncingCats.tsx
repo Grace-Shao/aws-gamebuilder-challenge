@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
@@ -170,7 +171,6 @@ export default function BouncingCats({ catCount }: { catCount: number }) {
         cancelAnimationFrame(requestRef.current)
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [windowSize.width, windowSize.height])
 
   useEffect(() => {

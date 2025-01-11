@@ -42,7 +42,7 @@ export default function RegisterPage() {
         setIsErrorModalOpen(true)
       }
     } catch (err) {
-      setErrorMessage('An unexpected error occurred. Please try again.')
+      setErrorMessage(`An unexpected error occurred: ${err}. Please try again.`)
       setIsErrorModalOpen(true)
     }
   }
