@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { MessageCircle, Globe, Heart, Clock, ShoppingCart, Smile, Users, Palette, Sun, Brain, Map, Utensils, Newspaper, Lightbulb, Zap, Briefcase, Feather, Music} from 'lucide-react';
+import { MessageCircle, Globe, Heart, Clock, ShoppingCart, Smile, Users, Palette, Sun, Brain, Map, Utensils, Newspaper, Lightbulb, Zap, Briefcase, Feather, Music } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Eczar, Work_Sans } from 'next/font/google'
+import { Eczar, Work_Sans } from 'next/font/google';
 
 const eczar = Eczar({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
-})
+});
 
 const workSans = Work_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
-})
+});
 
-export default function LessonPage() {
-    const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-    const searchParams = useSearchParams();
-    const language = searchParams.get('language') || 'english';
+function LessonContent() {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const searchParams = useSearchParams();
+  const language = searchParams.get('language') || 'english';
 
-    const topics = [
-        { 
+  const topics = [
+    {
             title: "Beginner Topics 😺", 
             items: [
                 { name: "Greetings & Self-Introduction", description: "Learn basic introductions", icon: MessageCircle, href: "/detailedLessonPage/BeginnerGreetings" },
@@ -124,3 +124,12 @@ export default function LessonPage() {
     )
 }
 
+export default function LessonPage() {
+    return (
+      <div className="min-h-screen bg-[#FFFBE8]">
+        <Suspense fallback={<div>Loading lessons...</div>}>
+          <LessonContent />
+        </Suspense>
+      </div>
+    );
+  }

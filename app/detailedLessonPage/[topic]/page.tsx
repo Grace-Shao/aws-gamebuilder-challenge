@@ -26,10 +26,24 @@ export default function DetailedLessonPage() {
     const [topic, setTopic] = useState("")
     const language = (searchParams.get('language') || 'english').charAt(0).toUpperCase() + 
                     (searchParams.get('language') || 'english').slice(1)
-    const user = "user9"
-    const level = "beginner"
+    const [user, setUser] = useState<string | "">("");
+    const level = "beginner" //i dont think we need this so if we have time we can refactor
     const [isPurring, setIsPurring] = useState(false)
     const audioRef = useRef<HTMLAudioElement | null>(null)
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const response = await fetch(`/api/get-session`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            setUser(data.userId);
+        };
+        fetchUser();
+    }, []);
 
     useEffect(() => {
         // Parse the topic from the URL parameter

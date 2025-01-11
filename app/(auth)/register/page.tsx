@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
+import { ErrorModal } from "@/components/error-modal"
 import { register } from '@/action/auth'
 
 export default function RegisterPage() {
@@ -15,20 +16,35 @@ export default function RegisterPage() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
     if (!agreeTerms) {
-      alert('You must agree to the terms of service')
+      setErrorMessage('You must agree to the terms of service')
+      setIsErrorModalOpen(true)
       return
     }
-    const result = await register(username, password, firstName, lastName)
-    if (result.success) {
-      router.push('/lessonPage')
-    } else {
-      // Handle registration error
-      console.error(result.error)
+
+    try {
+      const result = await register(username, password, firstName, lastName)
+      if (result.success) {
+        router.push('/lessonPage')
+      } else {
+        if (result.error === 'USERNAME_EXISTS') {
+          setErrorMessage('This username already exists. Please choose a different one.')
+        } else {
+          setErrorMessage(result.error || 'An error occurred during registration')
+        }
+        setIsErrorModalOpen(true)
+      }
+    } catch (err) {
+      console.error('Registration error:', err) // Log the error for debugging
+      setErrorMessage('An unexpected error occurred. Please try again.')
+      setIsErrorModalOpen(true)
     }
   }
 
@@ -100,7 +116,11 @@ export default function RegisterPage() {
           </p>
         </div>
       </div>
+      <ErrorModal 
+        isOpen={isErrorModalOpen} 
+        onClose={() => setIsErrorModalOpen(false)} 
+        errorMessage={errorMessage}
+      />
     </div>
   )
 }
-

@@ -24,9 +24,12 @@ export default function Notes({ user, lvl, topic, language }: NotesProps) {
     const [noteContent, setNoteContent] = useState('')
     const [lastSaved, setLastSaved] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
-
+    
     // Update the db 
     const saveNoteToDynamoDB = async () => {
+        if (!user) {
+            return;
+        }
         const currentDate = new Date()
         const response = await fetch(`/api/db/notesLevels`, {
             method: 'POST',
@@ -49,6 +52,9 @@ export default function Notes({ user, lvl, topic, language }: NotesProps) {
 
     // Gets the stuff from the db to show on the notes page
     const fetchNotes = async () => {
+        if (!user) {
+            return;
+        }
         setIsLoading(true)
         const response = await fetch(`/api/db/notesLevels`, {
             method: 'POST',
@@ -104,36 +110,45 @@ export default function Notes({ user, lvl, topic, language }: NotesProps) {
                             className="w-full h-full"
                         />
                     </div>
-
-                    {isLoading ? (
-                        <div className="flex-1 flex items-center justify-center">
-                            <div className="w-24 h-24">
-                                <Lottie 
-                                    animationData={catSpinAnimation}
-                                    loop={true}
-                                    className="w-full h-full"
-                                />
+                    { (typeof user === "string" && user.trim() !== "") ? (
+                        isLoading ? (
+                            <div className="flex-1 flex items-center justify-center">
+                                <div className="w-24 h-24">
+                                    <Lottie 
+                                        animationData={catSpinAnimation}
+                                        loop={true}
+                                        className="w-full h-full"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    ) : (
-                        <textarea
-                            value={noteContent}
-                            onChange={(e) => setNoteContent(e.target.value)}
-                            className="flex-1 w-full p-4 bg-transparent border-0 resize-none focus:outline-none h-[calc(100%-110px)]"
-                            placeholder="Write your notes here..."
+                        ) : (
+                            <textarea
+                                value={noteContent}
+                                onChange={(e) => setNoteContent(e.target.value)}
+                                className="flex-1 w-full p-4 bg-transparent border-0 resize-none focus:outline-none h-[calc(100%-110px)]"
+                                placeholder="Write your notes here..."
+                            />
+                        )) : (
+                            <textarea
+                            value="Notes are available upon sign up!"
+                            readOnly
+                            className="flex-1 w-full p-4 bg-transparent border-0 resize-none focus:outline-none h-[calc(100%-110px)] text-center"
                         />
                     )}
 
                     <div className="p-4 border-t flex items-center justify-between">
-                        <Button onClick={saveNoteToDynamoDB}>
+                        <Button 
+                        onClick={saveNoteToDynamoDB}
+                        disabled={!user}
+                        >
                             Save Note
                         </Button>
                         {lastSaved && (
                             <span className="text-sm text-gray-500">
                                 Saved on {lastSaved}
                             </span>
-                        )}
-                    </div>
+                        )} 
+                    </div> 
                 </Card>
             </div>
         )

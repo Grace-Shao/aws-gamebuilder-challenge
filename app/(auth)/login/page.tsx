@@ -9,12 +9,15 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Eye, EyeOff } from 'lucide-react'
 import { login } from '@/action/auth'
+import { ErrorModal } from "@/components/error-modal"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,8 +26,10 @@ export default function LoginPage() {
     if (result.success) {
       router.push('/lessonPage')
     } else {
-      // Handle login error
-      console.error(result.error)
+      setErrorMessage(result.error === 'User not found' || result.error === 'Invalid password' 
+        ? 'Incorrect username or password' 
+        : 'An error occurred during login')
+      setIsErrorModalOpen(true)
     }
   }
 
@@ -84,6 +89,11 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <ErrorModal 
+        isOpen={isErrorModalOpen} 
+        onClose={() => setIsErrorModalOpen(false)} 
+        errorMessage={errorMessage}
+      />
     </div>
   )
 }

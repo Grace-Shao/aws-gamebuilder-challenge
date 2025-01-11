@@ -18,6 +18,7 @@ const docClient = DynamoDBDocumentClient.from(client)
 export async function POST(request) {
     try {
         const params = await request.json();
+        console.log("params user id: ", params.user);
         let command;
         let totalTopic = params.topic + " and " + params.lang
         if (params.type == "update") {
@@ -37,6 +38,7 @@ export async function POST(request) {
             });
         }
         else if (params.type == "fetch") {
+            console.log("fetching");
             command = new GetCommand({
                 TableName: "NotesLevels",
                 Key: {

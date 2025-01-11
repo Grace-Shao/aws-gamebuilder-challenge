@@ -7,7 +7,7 @@ import { MessageInput } from './message-input'
 import Image from 'next/image'
 import catSleepAnimation from "@/public/catSleep.json"
 import dynamic from 'next/dynamic'
-// Dynamically import lottie-react to avoid document is not defined
+
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 const voiceCharacters: { [key: string]: string } = {
@@ -121,7 +121,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
     const [isLoading, setIsLoading] = useState(false)
     const [userMessageCount] = useState(0);
     const messagesPerReward = 10;
-    const [isSpeaking, setIsSpeaking] = useState(false);
 
     useEffect(() => {
         setMessages([])
@@ -218,7 +217,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
     }
 
         //text to speech starts
-        const [isLoadingVoice, setIsLoadingVoice] = useState(false);
+        const [isSpeaking, setIsSpeaking] = useState(false);
         const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null);
 
         const playWithVoice = async ( message: string ) => {
@@ -226,7 +225,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
                 return;
             }
             
-            if (isLoadingVoice === false) {
+            if (isSpeaking === true) {
                 if (currentAudio) {
                     //reset the audio back to the beginning
                     currentAudio.pause();
@@ -268,8 +267,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
         };
         //text to speech ends here
 
-    const toggleVoice = () => {
+    const toggleVoice = ( mess : string) => {
+        playWithVoice(mess); 
         setIsSpeaking(!isSpeaking);
+        console.log(isSpeaking)
         if (isSpeaking) {
             // Stop speaking logic here if needed
         } else {
@@ -295,7 +296,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ topic, language })
                             <MessageBubble content={message.content} role={message.role} />
                             {message.role === 'assistant' && (
                                 <button
-                                    onClick={toggleVoice}
+                                    onClick={ () => toggleVoice(message.content)}
                                     className="flex-shrink-0 -ml-0.5 mt-1"
                                 >
                                     <Image 

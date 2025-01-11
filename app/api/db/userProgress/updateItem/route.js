@@ -37,13 +37,14 @@ export async function PATCH(req) {
     }
 
     // Check if requested item is already equipped
-    if (currentItemId === newItemId) {
+    if (currentItemId["N"] === newItemId) {
         // unequip item instead of replacing it
-        newItemId = "";
+        newItemId = "-1";
     }
     
     // Update clothes in database
     response.Item.currentClothes.M[newItemType] = {"N": `${newItemId}`};
+
     try {
         const setNewClothes = new UpdateItemCommand({
             TableName: tableName,

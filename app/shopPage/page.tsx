@@ -1,7 +1,6 @@
 import Navbar from '@/components/Navbar';
 import ShopContainer from '../../components/shop/ShopContainer';
 import ProfileContainer from '@/components/shop/ProfileContainer';
-import Image from 'next/image'
 
 const ShopPage = () => {
     
